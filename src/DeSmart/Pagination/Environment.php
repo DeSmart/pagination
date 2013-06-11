@@ -69,4 +69,17 @@ class Environment extends BaseEnvironment {
     return $page;
   }
 
+  /**
+   * Get the pagination view.
+   *
+   * @param \DeSmart\Pagination\Paginator $paginator
+   * @param string $view view name
+   * @return \Illuminate\View\View
+   */
+  public function getPaginationView(Paginator $paginator, $view = null) {
+    $data = array('environment' => $this, 'paginator' => $paginator);
+
+    return $this->view->make($view ?: $this->getViewName(), $data);
+  }
+
 }

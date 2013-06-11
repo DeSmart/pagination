@@ -56,6 +56,22 @@ class EnvironmentTest extends PHPUnit_Framework_TestCase {
     $this->assertEquals(3, $env->getCurrentPage());
   }
 
+  public function testPaginationViewCanBeCreated() {
+    $env = $this->getEnvironment();
+    $paginator = m::mock('DeSmart\Pagination\Paginator');
+    $env->getViewDriver()->shouldReceive('make')->once()->with('pagination::slider', array('environment' => $env, 'paginator' => $paginator))->andReturn('foo');
+
+    $this->assertEquals('foo', $env->getPaginationView($paginator));
+  }
+
+  public function testPaginationWithCustomViewCanBeCreated() {
+    $env = $this->getEnvironment();
+    $paginator = m::mock('DeSmart\Pagination\Paginator');
+    $env->getViewDriver()->shouldReceive('make')->once()->with($view = 'foo.test', array('environment' => $env, 'paginator' => $paginator))->andReturn('foo');
+
+    $this->assertEquals('foo', $env->getPaginationView($paginator, $view));
+  }
+
   protected function getEnvironment($router = null, $urlGenerator = null) {
     $request = m::mock('Illuminate\Http\Request');
     $view = m::mock('Illuminate\View\Environment');

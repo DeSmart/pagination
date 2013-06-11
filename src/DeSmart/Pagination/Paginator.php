@@ -26,7 +26,7 @@ class Paginator extends BasePaginator {
    *
    * @var array|null
    */
-  protected $route = null;
+  protected $route;
 
   /**
    * @param \Illuminate\Routing\UrlGenerator $generator
@@ -85,6 +85,16 @@ class Paginator extends BasePaginator {
    */
   public function useCurrentRoute() {
     return $this->route($this->router->currentRouteName(), $this->router->getCurrentRoute()->getParameters(), true);
+  }
+
+  /**
+   * Get the pagination links view.
+   *
+   * @param string $view
+   * @return \Illuminate\View\View
+   */
+  public function links($view = null) {
+    return $this->env->getPaginationView($this, $view);
   }
 
   /**
