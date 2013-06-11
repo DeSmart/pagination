@@ -1,0 +1,25 @@
+{
+    "name": "desmart/pagination",
+    "description": "Laravel pagination on steroids",
+    "authors": [
+        {
+            "name": "Radoslaw Mejer",
+            "email": "radmen@desmart.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.0",
+        "illuminate/support": "4.0.x",
+        "illuminate/pagination": "4.0.x",
+        "illuminate/routing": "4.0.x"
+    },
+    "autoload": {
+        "psr-0": {
+            "DeSmart\\Pagination": "src/"
+        }
+    },
+    "minimum-stability": "dev",
+    "require-dev": {
+        "mockery/mockery": "0.8.*"
+    }
+}
