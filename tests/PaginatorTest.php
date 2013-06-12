@@ -110,4 +110,63 @@ class PaginatorTest extends PHPUnit_Framework_TestCase {
     $p->links($view);
   }
 
+  public function testGetPagesRangeReturnsValidRangeWithoutProximity() {
+    $p = m::mock('DeSmart\Pagination\Paginator[getLastPage]');
+    $p->shouldReceive('getLastPage')->once()->andReturn($last_page = 10);
+
+    $this->assertEquals(range(1, $last_page), $p->getPagesRange());
+  }
+
+  public function testGetPagesRangeReturnsValidRangeWithProximity() {
+    $p = m::mock('DeSmart\Pagination\Paginator[getLastPage,getCurrentPage]');
+    $p->shouldReceive('getLastPage')->andReturn($last_page = 10);
+    $p->shouldReceive('getCurrentPage')->andReturn(5, 5, 1, $last_page);
+
+    $p->pagesProximity(2);
+    $this->assertEquals(array(3, 4, 5, 6, 7), $p->getPagesRange());
+
+    $p->pagesProximity(10);
+    $this->assertEquals(range(1, $last_page), $p->getPagesRange());
+
+    $p->pagesProximity(2);
+    $this->assertEquals(array(1, 2, 3, 4, 5), $p->getPagesRange());
+
+    $p->pagesProximity(2);
+    $this->assertEquals(array(6, 7, 8, 9, 10), $p->getPagesRange());
+  }
+
+  public function testGetPagesRangeWithProximityForShortPagesRange() {
+    $p = m::mock('DeSmart\Pagination\Paginator[getLastPage,getCurrentPage]');
+    $p->shouldReceive('getLastPage')->andReturn($last_page = 2);
+    $p->shouldReceive('getCurrentPage')->andReturn(1, 2);
+
+    $p->pagesProximity(4);
+    $this->assertEquals(array(1, 2), $p->getPagesRange());
+
+    $p->pagesProximity(4);
+    $this->assertEquals(array(1, 2), $p->getPagesRange());
+
+    $p->pagesProximity(1);
+    $this->assertEquals(array(1, 2), $p->getPagesRange());
+  }
+
+  public function testCanShowFirstPage() {
+    $p = m::mock('DeSmart\Pagination\Paginator[getPagesRange]');
+    $p->shouldReceive('getPagesRange')->andReturn(array(1, 2, 3), array(2, 3, 4), array(5, 6, 7));
+
+    $this->assertFalse($p->canShowFirstPage());
+    $this->assertTrue($p->canShowFirstPage());
+    $this->assertTrue($p->canShowFirstPage());
+  }
+
+  public function testCanShowLastPage() {
+    $p = m::mock('DeSmart\Pagination\Paginator[getPagesRange,getLastPage]');
+    $p->shouldReceive('getPagesRange')->andReturn(array(1, 2, 3), array(2, 3, 4), array(5, 6, 7));
+    $p->shouldReceive('getLastPage')->andReturn(7);
+
+    $this->assertTrue($p->canShowLastPage());
+    $this->assertTrue($p->canShowLastPage());
+    $this->assertFalse($p->canShowLastPage());
+  }
+
 }

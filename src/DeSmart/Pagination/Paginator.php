@@ -24,9 +24,23 @@ class Paginator extends BasePaginator {
   /**
    * Route assigned to paginator
    *
-   * @var array|null
+   * @var array
    */
   protected $route;
+
+  /**
+   * Page range proximity 
+   *
+   * @var integer
+   */
+  protected $pagesProximity;
+
+  /**
+   * Cached pages range
+   *
+   * @var array
+   */
+  protected $pagesRange;
 
   /**
    * @param \Illuminate\Routing\UrlGenerator $generator
@@ -61,6 +75,19 @@ class Paginator extends BasePaginator {
   public function withoutQuery() {
     $this->withQuery = false;
   
+    return $this;
+  }
+
+  /**
+   * Set pages range proximity
+   *
+   * @param integer $proximity
+   * @return \DeSmart\Pagination\Paginator
+   */
+  public function pagesProximity($proximity) {
+    $this->pagesProximity = $proximity;
+    $this->pagesRange = null;
+
     return $this;
   }
 
@@ -118,6 +145,78 @@ class Paginator extends BasePaginator {
     $parameters[$this->env->getPageName()] = $page;
 
     return $this->urlGenerator->route($this->route['name'], $parameters, $this->route['absolute']);
+  }
+
+  /**
+   * Get pages range to be shown in template
+   *
+   * @return array
+   */
+  public function getPagesRange() {
+
+    if(null !== $this->pagesRange) {
+      return $this->pagesRange;
+    }
+
+    if(null === $this->pagesProximity) {
+      $this->pagesRange = range(1, $this->getLastPage());
+    }
+    else {
+      $this->pagesRange = $this->calculatePagesRange();
+    }
+
+    return $this->pagesRange;
+  }
+
+  /**
+   * Calculate pages range for given proximity
+   *
+   * @return array
+   */
+  protected function calculatePagesRange() {
+    $current_page = $this->getCurrentPage();
+    $last_page = $this->getLastPage();
+    $start = $current_page - $this->pagesProximity;
+    $end = $current_page + $this->pagesProximity;
+
+    if($start < 1) {
+      $offset = 1 - $start;
+      $start += $offset;
+      $end += $offset;
+    }
+    else if($end > $last_page) {
+      $offset = $end - $last_page;
+      $start -= $offset;
+      $end -= $offset;
+    }
+
+    if($start < 1) {
+      $start = 1;
+    }
+
+    if($end > $last_page) {
+      $end = $last_page;
+    }
+
+    return range($start, $end);
+  }
+
+  /**
+   * Check if can show first page in template
+   *
+   * @return boolean
+   */
+  public function canShowFirstPage() {
+    return false === array_search(1, $this->getPagesRange());
+  }
+
+  /**
+   * Check if can show last page in template
+   *
+   * @return boolean
+   */
+  public function canShowLastPage() {
+    return false === array_search($this->getLastPage(), $this->getPagesRange());
   }
 
 }
