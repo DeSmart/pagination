@@ -1,6 +1,8 @@
 {
     "name": "desmart/pagination",
     "description": "Laravel pagination on steroids",
+    "keywords": ["laravel", "pagination"],
+    "license": "MIT",
     "authors": [
         {
             "name": "Radoslaw Mejer",
