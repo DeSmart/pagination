@@ -1,5 +1,7 @@
 ## Overview
 
+[![Build Status](https://api.travis-ci.org/DeSmart/pagination.png)](https://travis-ci.org/DeSmart/pagination)
+
 This package is an extension for Laravel4 pagination module.
 
 It provides new functionalities:
