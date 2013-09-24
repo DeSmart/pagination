@@ -46,12 +46,12 @@ Route::get('/products/{page}.html', array('as' => 'products.list', 'uses' => '')
 // use the current route
 $list = Product::paginate(10)
   ->useCurrentRoute()
-  ->setProximity(3);
+  ->pagesProximity(3);
   
 // use custom route
 $list = Product::paginate(10)
   ->route('products.list')
-  ->setProximity(3);
+  ->pagesProximity(3);
 ```
 
 ### In view
