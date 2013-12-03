@@ -96,11 +96,10 @@ class Paginator extends BasePaginator {
    *
    * @param string $name
    * @param array $parameters
-   * @param boolean $absolute
    * @return \DeSmart\Pagination\Paginator
    */
-  public function route($name, array $parameters = array(), $absolute = true) {
-    $this->route = compact('name', 'parameters', 'absolute');
+  public function route($name, array $parameters = array()) {
+    $this->route = compact('name', 'parameters');
 
     return $this;
   }
@@ -108,11 +107,15 @@ class Paginator extends BasePaginator {
   /**
    * Use current route for generating url
    *
+   * @TODO $route->parameters() can throw Exception if it has no parameters defined
+   *       it should be handled, but Laravel UrlGenerator can't generate urls with extra params
+   *       so maybe it's better to leave it that way.
    * @return \DeSmart\Pagination\Paginator
    */
   public function useCurrentRoute() {
-    // @TODO \Illuminate\Routing\Router::currentRouteName() doesn't exist
-    return $this->route($this->router->currentRouteName(), $this->router->current()->getParameters(), true);
+    $route = $this->router->current();
+
+    return $this->route($route->getName(), $route->parameters(), true);
   }
 
   /**
@@ -145,7 +148,7 @@ class Paginator extends BasePaginator {
 
     $parameters[$this->env->getPageName()] = $page;
 
-    return $this->urlGenerator->route($this->route['name'], $parameters, $this->route['absolute']);
+    return $this->urlGenerator->route($this->route['name'], $parameters);
   }
 
   /**
