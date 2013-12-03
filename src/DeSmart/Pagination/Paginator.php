@@ -111,7 +111,8 @@ class Paginator extends BasePaginator {
    * @return \DeSmart\Pagination\Paginator
    */
   public function useCurrentRoute() {
-    return $this->route($this->router->currentRouteName(), $this->router->getCurrentRoute()->getParameters(), true);
+    // @TODO \Illuminate\Routing\Router::currentRouteName() doesn't exist
+    return $this->route($this->router->currentRouteName(), $this->router->current()->getParameters(), true);
   }
 
   /**

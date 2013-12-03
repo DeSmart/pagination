@@ -71,7 +71,7 @@ class PaginatorTest extends PHPUnit_Framework_TestCase {
     $route->shouldReceive('getParameters')->once()->andReturn($params = array('b' => 'foo'));
     $router = m::mock('Illuminate\Routing\Router');
     $router->shouldReceive('currentRouteName')->once()->andReturn($name = 'test.route');
-    $router->shouldReceive('getCurrentRoute')->once()->andReturn($route);
+    $router->shouldReceive('current')->once()->andReturn($route);
 
     $p = new Paginator($env = m::mock('DeSmart\Pagination\Environment'), array('foo', 'bar', 'baz'), 3, 2);
     $p->setUrlGenerator($generator);
