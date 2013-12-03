@@ -29,7 +29,7 @@ class PaginatorTest extends PHPUnit_Framework_TestCase {
     $env->shouldReceive('getRequest')->once()->andReturn($request);
 
     $env->shouldReceive('getPageName')->once()->andReturn('page');
-    $generator->shouldReceive('route')->once()->with($name = 'test.route', array('a' => 1, 'page' => 1), true);
+    $generator->shouldReceive('route')->once()->with($name = 'test.route', array('a' => 1, 'page' => 1), null);
     $p->route($name);
 
     $p->getUrl(1);
@@ -44,7 +44,7 @@ class PaginatorTest extends PHPUnit_Framework_TestCase {
     $env->shouldReceive('getRequest')->never();
     $env->shouldReceive('getPageName')->andReturn('page');
 
-    $generator->shouldReceive('route')->once()->with($name = 'test.route', array('page' => 1), true);
+    $generator->shouldReceive('route')->once()->with($name = 'test.route', array('page' => 1), null);
     $p->route($name);
 
     $p->getUrl(1);
@@ -68,9 +68,8 @@ class PaginatorTest extends PHPUnit_Framework_TestCase {
   public function testGetUrlFromCurrentRoute() {
     $generator = m::mock('Illuminate\Routing\UrlGenerator');
     $route = m::mock('Illuminate\Routing\Route');
-    $route->shouldReceive('getParameters')->once()->andReturn($params = array('b' => 'foo'));
+    $route->shouldReceive('parameters')->once()->andReturn($params = array('b' => 'foo'));
     $router = m::mock('Illuminate\Routing\Router');
-    $router->shouldReceive('currentRouteName')->once()->andReturn($name = 'test.route');
     $router->shouldReceive('current')->once()->andReturn($route);
 
     $p = new Paginator($env = m::mock('DeSmart\Pagination\Environment'), array('foo', 'bar', 'baz'), 3, 2);
@@ -80,7 +79,7 @@ class PaginatorTest extends PHPUnit_Framework_TestCase {
     $p->useCurrentRoute();
     $env->shouldReceive('getPageName')->andReturn('page');
 
-    $generator->shouldReceive('route')->once()->with($name, array_merge($params, array('page' => 1)), true);
+    $generator->shouldReceive('route')->once()->with(null, array_merge($params, array('page' => 1)), $route);
 
     $p->getUrl(1);
   }

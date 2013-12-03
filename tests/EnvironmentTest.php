@@ -36,9 +36,9 @@ class EnvironmentTest extends PHPUnit_Framework_TestCase {
 
   public function testCurrentUrlCanBeRetrievedFromRoute() {
     $route = m::mock('Illuminate\Routing\Route');
-    $route->shouldReceive('getParameter')->with('page', null)->andReturn(2);
+    $route->shouldReceive('parameter')->with('page', null)->andReturn(2);
     $router = m::mock('Illuminate\Routing\Router');
-    $router->shouldReceive('getCurrentRoute')->andReturn($route);
+    $router->shouldReceive('current')->andReturn($route);
 
     $env = $this->getEnvironment($router);
     $request = Illuminate\Http\Request::create('http://foo.com', 'GET');
@@ -82,9 +82,9 @@ class EnvironmentTest extends PHPUnit_Framework_TestCase {
 
     if(null === $router) {
       $route = m::mock('Illuminate\Routing\Route');
-      $route->shouldReceive('getParameter')->with('page', null)->andReturn(null);
+      $route->shouldReceive('parameter')->with('page', null)->andReturn(null);
       $router = m::mock('Illuminate\Routing\Router');
-      $router->shouldReceive('getCurrentRoute')->andReturn($route);
+      $router->shouldReceive('current')->andReturn($route);
     }
 
     if(null === $urlGenerator) {
