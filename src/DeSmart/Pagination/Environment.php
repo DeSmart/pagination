@@ -55,7 +55,8 @@ class Environment extends BaseEnvironment {
     $page = (int) $this->currentPage;
 
     if(true === empty($page)) {
-      $page = $this->router->getCurrentRoute()->getParameter($this->pageName, null);
+      $page = $this->router->current()
+        ->parameter($this->pageName, null);
     }
 
     if(null === $page) {
