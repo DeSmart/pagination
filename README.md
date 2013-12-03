@@ -29,7 +29,7 @@ To use `desmart/pagination` with Laravel 4.0 switch to version `1.0.*`.
 ### General usage
 * `withQuery()` - bind query parameters to url generator (by default query parameters are included). Works only for url generating from routes.
 * `withoutQuery()` - don't bind query parameters
-* `route($name[, array $parameters])` - use given route for generating url to pages
+* `route($route[, array $parameters])` - use given route for generating url to pages (it can be route name, or instance of `Illuminate\Routing\Route`)
 * `useCurrentRoute()` - use current (active) route for url generating
 
 ### For templates
