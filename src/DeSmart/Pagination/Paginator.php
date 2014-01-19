@@ -105,7 +105,7 @@ class Paginator extends BasePaginator {
 
     if(true === is_object($route) && $route instanceof Route) {
       $instance = $route;
-      $name = null;
+      $name = $route->getName();
     }
 
     $this->routeConfig = compact('instance', 'name', 'parameters');
