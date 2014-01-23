@@ -97,9 +97,10 @@ class Paginator extends BasePaginator {
    *
    * @param \Illuminate\Routing\Route|string $route if string route with given name will be used
    * @param array $parameters
+   * @param bool $absolute
    * @return \DeSmart\Pagination\Paginator
    */
-  public function route($route, array $parameters = array()) {
+  public function route($route, array $parameters = array(), $absolute = true) {
     $instance = null;
     $name = $route;
 
@@ -108,7 +109,7 @@ class Paginator extends BasePaginator {
       $name = null;
     }
 
-    $this->routeConfig = compact('instance', 'name', 'parameters');
+    $this->routeConfig = compact('instance', 'name', 'parameters', 'absolute');
 
     return $this;
   }
@@ -156,8 +157,9 @@ class Paginator extends BasePaginator {
     }
 
     $parameters[$this->env->getPageName()] = $page;
+    $absolute = (null === $this->routeConfig['absolute']) ? true : $this->routeConfig['absolute'];
 
-    return $this->urlGenerator->route($this->routeConfig['name'], $parameters, $this->routeConfig['instance']);
+    return $this->urlGenerator->route($this->routeConfig['name'], $parameters, $absolute, $this->routeConfig['instance']);
   }
 
   /**

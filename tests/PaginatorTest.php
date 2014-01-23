@@ -29,7 +29,7 @@ class PaginatorTest extends PHPUnit_Framework_TestCase {
     $env->shouldReceive('getRequest')->once()->andReturn($request);
 
     $env->shouldReceive('getPageName')->once()->andReturn('page');
-    $generator->shouldReceive('route')->once()->with($name = 'test.route', array('a' => 1, 'page' => 1), null);
+    $generator->shouldReceive('route')->once()->with($name = 'test.route', array('a' => 1, 'page' => 1), true, null);
     $p->route($name);
 
     $p->getUrl(1);
@@ -44,7 +44,7 @@ class PaginatorTest extends PHPUnit_Framework_TestCase {
     $env->shouldReceive('getRequest')->never();
     $env->shouldReceive('getPageName')->andReturn('page');
 
-    $generator->shouldReceive('route')->once()->with($name = 'test.route', array('page' => 1), null);
+    $generator->shouldReceive('route')->once()->with($name = 'test.route', array('page' => 1), true, null);
     $p->route($name);
 
     $p->getUrl(1);
@@ -59,7 +59,7 @@ class PaginatorTest extends PHPUnit_Framework_TestCase {
     $p->withoutQuery();
     $env->shouldReceive('getPageName')->andReturn('page');
 
-    $generator->shouldReceive('route')->once()->with($name = 'test.route', array_merge($params, array('page' => 1)), $absolute = false);
+    $generator->shouldReceive('route')->once()->with($name = 'test.route', array_merge($params, array('page' => 1)), $absolute = false, null);
     $p->route($name, $params, $absolute);
 
     $p->getUrl(1);
@@ -79,7 +79,7 @@ class PaginatorTest extends PHPUnit_Framework_TestCase {
     $p->useCurrentRoute();
     $env->shouldReceive('getPageName')->andReturn('page');
 
-    $generator->shouldReceive('route')->once()->with(null, array_merge($params, array('page' => 1)), $route);
+    $generator->shouldReceive('route')->once()->with(null, array_merge($params, array('page' => 1)), true, $route);
 
     $p->getUrl(1);
   }
