@@ -129,16 +129,6 @@ class Paginator extends BasePaginator {
   }
 
   /**
-   * Get the pagination links view.
-   *
-   * @param string $view
-   * @return \Illuminate\View\View
-   */
-  public function links($view = null) {
-    return $this->env->getPaginationView($this, $view);
-  }
-
-  /**
    * Get a URL for a given page number.
    *
    * @param integer $page
