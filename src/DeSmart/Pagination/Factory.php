@@ -1,10 +1,10 @@
 <?php namespace DeSmart\Pagination;
 
-use Illuminate\Pagination\Environment as BaseEnvironment;
+use Illuminate\Pagination;
 use Illuminate\Routing\UrlGenerator;
 use Illuminate\Routing\Router;
 
-class Environment extends BaseEnvironment {
+class Factory extends Pagination\Factory {
 
   /**
    * @var \Illuminate\Routing\UrlGenerator
@@ -38,7 +38,7 @@ class Environment extends BaseEnvironment {
    * @param integer $perPage
    * @return \DeSmart\Pagination\Paginator
    */
-  public function make(array $items, $total, $perPage) {
+  public function make(array $items, $total, $perPage = null) {
     $paginator = new Paginator($this, $items, $total, $perPage);
     $paginator->setUrlGenerator($this->urlGenerator);
     $paginator->setRouter($this->router);

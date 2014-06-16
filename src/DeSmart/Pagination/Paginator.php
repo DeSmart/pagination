@@ -143,10 +143,10 @@ class Paginator extends BasePaginator {
     $parameters = $this->routeConfig['parameters'];
 
     if(true === $this->withQuery) {
-      $parameters = array_merge($parameters, $this->env->getRequest()->query());
+      $parameters = array_merge($parameters, $this->factory->getRequest()->query());
     }
 
-    $parameters[$this->env->getPageName()] = $page;
+    $parameters[$this->factory->getPageName()] = $page;
     $absolute = (null === $this->routeConfig['absolute']) ? true : $this->routeConfig['absolute'];
 
     return $this->urlGenerator->route($this->routeConfig['name'], $parameters, $absolute, $this->routeConfig['instance']);
