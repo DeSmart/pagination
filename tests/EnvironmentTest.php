@@ -4,6 +4,10 @@ use DeSmart\Pagination\Environment;
 
 class EnvironmentTest extends PHPUnit_Framework_TestCase {
 
+  public function setUp() {
+    m::getConfiguration()->allowMockingNonExistentMethods(false);
+  }
+
   public function tearDown() {
     m::close();
   }
