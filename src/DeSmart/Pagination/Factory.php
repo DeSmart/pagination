@@ -38,7 +38,7 @@ class Factory extends Pagination\Factory {
    * @param integer $perPage
    * @return \DeSmart\Pagination\Paginator
    */
-  public function make(array $items, $total, $perPage) {
+  public function make(array $items, $total, $perPage = null) {
     $paginator = new Paginator($this, $items, $total, $perPage);
     $paginator->setUrlGenerator($this->urlGenerator);
     $paginator->setRouter($this->router);
