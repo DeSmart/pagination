@@ -16,11 +16,11 @@ class PaginatorTest extends PHPUnit_Framework_TestCase {
   public function testGetUrlProperlyFormatsUrl() {
     $p = new Paginator($env = m::mock('DeSmart\Pagination\Environment'), array('foo', 'bar', 'baz'), 3, 2);
     $env->shouldReceive('getCurrentUrl')->twice()->andReturn('http://foo.com');
-    $env->shouldReceive('getPageName')->twice()->andReturn('page');
+    $env->shouldReceive('getPageName')->atLeast(2)->andReturn('page');
 
     $this->assertEquals('http://foo.com?page=1', $p->getUrl(1));
     $p->addQuery('foo', 'bar');
-    $this->assertEquals('http://foo.com?page=1&foo=bar', $p->getUrl(1));
+    $this->assertEquals('http://foo.com?foo=bar&page=1', $p->getUrl(1));
   }
 
   public function testGetUrlFromRoute() {
