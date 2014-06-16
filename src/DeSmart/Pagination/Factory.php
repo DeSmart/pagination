@@ -4,7 +4,7 @@ use Illuminate\Pagination;
 use Illuminate\Routing\UrlGenerator;
 use Illuminate\Routing\Router;
 
-class Environment extends Pagination\Factory {
+class Factory extends Pagination\Factory {
 
   /**
    * @var \Illuminate\Routing\UrlGenerator

@@ -18,7 +18,7 @@ class PaginationServiceProvider extends ServiceProvider {
    */
   public function register() {
     $this->app['paginator'] = $this->app->share(function($app) {
-      $paginator = new Environment($app['request'], $app['view'], $app['translator']);
+      $paginator = new Factory($app['request'], $app['view'], $app['translator']);
       $paginator->setViewName($app['config']['view.pagination']);
       $paginator->setUrlGenerator($app['url']);
       $paginator->setRouter($app['router']);

@@ -14,7 +14,7 @@ class PaginatorTest extends PHPUnit_Framework_TestCase {
   }
 
   public function testGetUrlProperlyFormatsUrl() {
-    $p = new Paginator($env = m::mock('DeSmart\Pagination\Environment'), array('foo', 'bar', 'baz'), 3, 2);
+    $p = new Paginator($env = m::mock('DeSmart\Pagination\Factory'), array('foo', 'bar', 'baz'), 3, 2);
     $env->shouldReceive('getCurrentUrl')->twice()->andReturn('http://foo.com');
     $env->shouldReceive('getPageName')->atLeast(2)->andReturn('page');
 
@@ -28,7 +28,7 @@ class PaginatorTest extends PHPUnit_Framework_TestCase {
     $request = m::mock('Illuminate\Http\Request');
     $request->shouldReceive('query')->once()->andReturn($query = array('a' => 1));
 
-    $p = new Paginator($env = m::mock('DeSmart\Pagination\Environment'), array('foo', 'bar', 'baz'), 3, 2);
+    $p = new Paginator($env = m::mock('DeSmart\Pagination\Factory'), array('foo', 'bar', 'baz'), 3, 2);
     $p->setUrlGenerator($generator);
     $env->shouldReceive('getRequest')->once()->andReturn($request);
 
@@ -42,7 +42,7 @@ class PaginatorTest extends PHPUnit_Framework_TestCase {
   public function testGetUrlFromRouteWithoutQuery() {
     $generator = m::mock('Illuminate\Routing\UrlGenerator');
 
-    $p = new Paginator($env = m::mock('DeSmart\Pagination\Environment'), array('foo', 'bar', 'baz'), 3, 2);
+    $p = new Paginator($env = m::mock('DeSmart\Pagination\Factory'), array('foo', 'bar', 'baz'), 3, 2);
     $p->setUrlGenerator($generator);
     $p->withoutQuery();
     $env->shouldReceive('getRequest')->never();
@@ -58,7 +58,7 @@ class PaginatorTest extends PHPUnit_Framework_TestCase {
     $generator = m::mock('Illuminate\Routing\UrlGenerator');
     $params = array('b' => 'foo');
 
-    $p = new Paginator($env = m::mock('DeSmart\Pagination\Environment'), array('foo', 'bar', 'baz'), 3, 2);
+    $p = new Paginator($env = m::mock('DeSmart\Pagination\Factory'), array('foo', 'bar', 'baz'), 3, 2);
     $p->setUrlGenerator($generator);
     $p->withoutQuery();
     $env->shouldReceive('getPageName')->andReturn('page');
@@ -76,7 +76,7 @@ class PaginatorTest extends PHPUnit_Framework_TestCase {
     $router = m::mock('Illuminate\Routing\Router');
     $router->shouldReceive('current')->once()->andReturn($route);
 
-    $p = new Paginator($env = m::mock('DeSmart\Pagination\Environment'), array('foo', 'bar', 'baz'), 3, 2);
+    $p = new Paginator($env = m::mock('DeSmart\Pagination\Factory'), array('foo', 'bar', 'baz'), 3, 2);
     $p->setUrlGenerator($generator);
     $p->setRouter($router);
     $p->withoutQuery();
@@ -89,25 +89,25 @@ class PaginatorTest extends PHPUnit_Framework_TestCase {
   }
 
   public function testPaginatorIsCountable() {
-    $p = new Paginator($env = m::mock('DeSmart\Pagination\Environment'), array('foo', 'bar', 'baz'), 3, 2);
+    $p = new Paginator($env = m::mock('DeSmart\Pagination\Factory'), array('foo', 'bar', 'baz'), 3, 2);
 
     $this->assertEquals(3, count($p));
   }
 
   public function testPaginatorIsIterable() {
-    $p = new Paginator($env = m::mock('DeSmart\Pagination\Environment'), array('foo', 'bar', 'baz'), 3, 2);
+    $p = new Paginator($env = m::mock('DeSmart\Pagination\Factory'), array('foo', 'bar', 'baz'), 3, 2);
 
     $this->assertInstanceOf('ArrayIterator', $p->getIterator());
     $this->assertEquals(array('foo', 'bar', 'baz'), $p->getIterator()->getArrayCopy());
   }
 
-  public function testGetLinksCallsEnvironmentProperly() {
-    $p = new Paginator($env = m::mock('DeSmart\Pagination\Environment'), array('foo', 'bar', 'baz'), 3, 2);
+  public function testGetLinksCallsFactoryProperly() {
+    $p = new Paginator($env = m::mock('DeSmart\Pagination\Factory'), array('foo', 'bar', 'baz'), 3, 2);
     $env->shouldReceive('getPaginationView')->once()->with($p, null)->andReturn('foo');
 
     $this->assertEquals('foo', $p->links());
 
-    $p = new Paginator($env = m::mock('DeSmart\Pagination\Environment'), array('foo', 'bar', 'baz'), 3, 2);
+    $p = new Paginator($env = m::mock('DeSmart\Pagination\Factory'), array('foo', 'bar', 'baz'), 3, 2);
     $env->shouldReceive('getPaginationView')->once()->with($p, $view = 'foo');
 
     $p->links($view);

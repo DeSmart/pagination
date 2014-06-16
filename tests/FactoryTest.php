@@ -1,8 +1,8 @@
 <?php
 use Mockery as m;
-use DeSmart\Pagination\Environment;
+use DeSmart\Pagination\Factory;
 
-class EnvironmentTest extends PHPUnit_Framework_TestCase {
+class FactoryTest extends PHPUnit_Framework_TestCase {
 
   public function setUp() {
     m::getConfiguration()->allowMockingNonExistentMethods(false);
@@ -12,12 +12,12 @@ class EnvironmentTest extends PHPUnit_Framework_TestCase {
     m::close();
   }
 
-  public function testCreationOfEnvironment() {
-    $env = $this->getEnvironment();
+  public function testCreationOfFactory() {
+    $env = $this->getFactory();
   }
 
   public function testPaginatorCanBeCreated() {
-    $env = $this->getEnvironment();
+    $env = $this->getFactory();
     $request = Illuminate\Http\Request::create('http://foo.com', 'GET');
     $env->setRequest($request);
 
@@ -25,13 +25,13 @@ class EnvironmentTest extends PHPUnit_Framework_TestCase {
   }
 
   public function testCurrentPageCanBeRetrieved() {
-    $env = $this->getEnvironment();
+    $env = $this->getFactory();
     $request = Illuminate\Http\Request::create('http://foo.com?page=2', 'GET');
     $env->setRequest($request);
 
     $this->assertEquals(2, $env->getCurrentPage());
 
-    $env = $this->getEnvironment();
+    $env = $this->getFactory();
     $request = Illuminate\Http\Request::create('http://foo.com?page=-1', 'GET');
     $env->setRequest($request);
 
@@ -44,7 +44,7 @@ class EnvironmentTest extends PHPUnit_Framework_TestCase {
     $router = m::mock('Illuminate\Routing\Router');
     $router->shouldReceive('current')->andReturn($route);
 
-    $env = $this->getEnvironment($router);
+    $env = $this->getFactory($router);
     $request = Illuminate\Http\Request::create('http://foo.com', 'GET');
     $env->setRequest($request);
 
@@ -52,7 +52,7 @@ class EnvironmentTest extends PHPUnit_Framework_TestCase {
   }
 
   public function testSettingCurrentUrlOverrulesRequest() {
-    $env = $this->getEnvironment();
+    $env = $this->getFactory();
     $request = Illuminate\Http\Request::create('http://foo.com?page=2', 'GET');
     $env->setRequest($request);
     $env->setCurrentPage(3);
@@ -61,7 +61,7 @@ class EnvironmentTest extends PHPUnit_Framework_TestCase {
   }
 
   public function testPaginationViewCanBeCreated() {
-    $env = $this->getEnvironment();
+    $env = $this->getFactory();
     $paginator = m::mock('DeSmart\Pagination\Paginator');
     $env->getViewFactory()->shouldReceive('make')->once()->with('pagination::slider', array('environment' => $env, 'paginator' => $paginator))->andReturn('foo');
 
@@ -69,20 +69,20 @@ class EnvironmentTest extends PHPUnit_Framework_TestCase {
   }
 
   public function testPaginationWithCustomViewCanBeCreated() {
-    $env = $this->getEnvironment();
+    $env = $this->getFactory();
     $paginator = m::mock('DeSmart\Pagination\Paginator');
     $env->getViewFactory()->shouldReceive('make')->once()->with($view = 'foo.test', array('environment' => $env, 'paginator' => $paginator))->andReturn('foo');
 
     $this->assertEquals('foo', $env->getPaginationView($paginator, $view));
   }
 
-  protected function getEnvironment($router = null, $urlGenerator = null) {
+  protected function getFactory($router = null, $urlGenerator = null) {
     $request = m::mock('Illuminate\Http\Request');
     $view = m::mock('Illuminate\View\Factory');
     $trans = m::mock('Symfony\Component\Translation\TranslatorInterface');
     $view->shouldReceive('addNamespace')->once()->with('pagination', realpath(__DIR__.'/../vendor/illuminate/pagination/Illuminate/Pagination').'/views');
 
-    $env = new Environment($request, $view, $trans, 'page');
+    $env = new Factory($request, $view, $trans, 'page');
 
     if(null === $router) {
       $route = m::mock('Illuminate\Routing\Route');
