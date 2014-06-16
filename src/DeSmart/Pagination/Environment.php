@@ -1,10 +1,10 @@
 <?php namespace DeSmart\Pagination;
 
-use Illuminate\Pagination\Environment as BaseEnvironment;
+use Illuminate\Pagination;
 use Illuminate\Routing\UrlGenerator;
 use Illuminate\Routing\Router;
 
-class Environment extends BaseEnvironment {
+class Environment extends Pagination\Factory {
 
   /**
    * @var \Illuminate\Routing\UrlGenerator

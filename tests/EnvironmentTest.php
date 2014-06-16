@@ -63,7 +63,7 @@ class EnvironmentTest extends PHPUnit_Framework_TestCase {
   public function testPaginationViewCanBeCreated() {
     $env = $this->getEnvironment();
     $paginator = m::mock('DeSmart\Pagination\Paginator');
-    $env->getViewDriver()->shouldReceive('make')->once()->with('pagination::slider', array('environment' => $env, 'paginator' => $paginator))->andReturn('foo');
+    $env->getViewFactory()->shouldReceive('make')->once()->with('pagination::slider', array('environment' => $env, 'paginator' => $paginator))->andReturn('foo');
 
     $this->assertEquals('foo', $env->getPaginationView($paginator));
   }
@@ -71,14 +71,14 @@ class EnvironmentTest extends PHPUnit_Framework_TestCase {
   public function testPaginationWithCustomViewCanBeCreated() {
     $env = $this->getEnvironment();
     $paginator = m::mock('DeSmart\Pagination\Paginator');
-    $env->getViewDriver()->shouldReceive('make')->once()->with($view = 'foo.test', array('environment' => $env, 'paginator' => $paginator))->andReturn('foo');
+    $env->getViewFactory()->shouldReceive('make')->once()->with($view = 'foo.test', array('environment' => $env, 'paginator' => $paginator))->andReturn('foo');
 
     $this->assertEquals('foo', $env->getPaginationView($paginator, $view));
   }
 
   protected function getEnvironment($router = null, $urlGenerator = null) {
     $request = m::mock('Illuminate\Http\Request');
-    $view = m::mock('Illuminate\View\Environment');
+    $view = m::mock('Illuminate\View\Factory');
     $trans = m::mock('Symfony\Component\Translation\TranslatorInterface');
     $view->shouldReceive('addNamespace')->once()->with('pagination', realpath(__DIR__.'/../vendor/illuminate/pagination/Illuminate/Pagination').'/views');
 
