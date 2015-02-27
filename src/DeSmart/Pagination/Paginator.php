@@ -149,7 +149,11 @@ class Paginator extends BasePaginator {
     $parameters[$this->factory->getPageName()] = $page;
     $absolute = (null === $this->routeConfig['absolute']) ? true : $this->routeConfig['absolute'];
 
-    return $this->urlGenerator->route($this->routeConfig['name'], $parameters, $absolute, $this->routeConfig['instance']);
+    // allow adding hash fragments to url
+    $fragment = $this->buildFragment();
+    $generatedRoute = $this->urlGenerator->route($this->routeConfig['name'], $parameters, $absolute, $this->routeConfig['instance']);
+
+    return $generatedRoute.$fragment;
   }
 
   /**
