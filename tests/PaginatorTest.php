@@ -172,4 +172,17 @@ class PaginatorTest extends PHPUnit_Framework_TestCase {
     $this->assertFalse($p->canShowLastPage());
   }
 
+  public function testCanAddFragmentWithRouteConfig() {
+    $generator = m::mock('Illuminate\Routing\UrlGenerator');
+    $p = new Paginator($env = m::mock('DeSmart\Pagination\Factory'), array('foo', 'bar', 'baz'), 3, 2);
+    $p->fragment('test');
+    $p->setUrlGenerator($generator);
+    $p->withoutQuery();
+    $env->shouldReceive('getRequest')->never();
+    $env->shouldReceive('getPageName')->andReturn('page');
+    $generator->shouldReceive('route')->once()->with($name = 'test.route', array('page' => 1), true, null);
+    $p->route($name);
+    $this->assertEquals('#test', $p->getUrl(1));
+  }
+
 }
