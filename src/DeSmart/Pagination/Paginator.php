@@ -151,9 +151,9 @@ class Paginator extends BasePaginator {
 
     // allow adding hash fragments to url
     $fragment = $this->buildFragment();
-    $generatedRoute = $this->urlGenerator->route($this->routeConfig['name'], $parameters, $absolute, $this->routeConfig['instance']);
+    $generated_route = $this->urlGenerator->route($this->routeConfig['name'], $parameters, $absolute, $this->routeConfig['instance']);
 
-    return $generatedRoute.$fragment;
+    return $generated_route.$fragment;
   }
 
   /**
